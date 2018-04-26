@@ -7,7 +7,7 @@ $browser = $_SERVER['HTTP_USER_AGENT'];
 $referrer = $_SERVER['HTTP_REFERER'];
 $host = $_SERVER['SERVER_NAME'];
 $hostname = gethostname();
- if ($referred == "") {
+ if ($referrer == "") {
   $referrer = "This page was accessed directly";
   }
 echo "<b>Visitor IP address:</b><br/>" . $ip . "<br/>";
