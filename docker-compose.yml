@@ -16,10 +16,23 @@ services:
       - web-1
       - web-2
       - web-3
-      - php
 
-  php:
-    container_name: "php-fpm"
+  php-1:
+    container_name: "php-fpm-1"
+    image: php:7.1-fpm-alpine
+    restart: always
+    volumes:
+      - ./content/php:/var/www/html
+
+  php-2:
+    container_name: "php-fpm-2"
+    image: php:7.1-fpm-alpine
+    restart: always
+    volumes:
+      - ./content/php:/var/www/html
+
+  php-3:
+    container_name: "php-fpm-3"
     image: php:7.1-fpm-alpine
     restart: always
     volumes:
@@ -29,25 +42,31 @@ services:
     image: nginx:stable-alpine
     container_name: web-1
     volumes:
-      - ./config/web-default.conf:/etc/nginx/conf.d/default.conf
-      - ./content/web-1:/var/www/html
+      - ./content/web-1/web-default.conf:/etc/nginx/conf.d/default.conf
+      - ./content/php:/var/www/html
     ports:
       - "8081:80"
+    links:
+      - php-1
 
   web-2:
     image: nginx:stable-alpine
     volumes:
-      - ./config/web-default.conf:/etc/nginx/conf.d/default.conf
-      - ./content/web-2:/var/www/html
+      - ./content/web-2/web-default.conf:/etc/nginx/conf.d/default.conf
+      - ./content/php:/var/www/html
     container_name: web-2
     ports:
       - "8082:80"
+    links:
+      - php-2
 
   web-3:
     image: nginx:stable-alpine
     volumes:
-      - ./config/web-default.conf:/etc/nginx/conf.d/default.conf
-      - ./content/web-3:/var/www/html
+      - ./content/web-3/web-default.conf:/etc/nginx/conf.d/default.conf
+      - ./content/php:/var/www/html
     container_name: web-3
     ports:
       - "8083:80"
+    links:
+      - php-3
